@@ -3,10 +3,10 @@
 return new \Phalcon\Config(array(
     'database' => array(
         'adapter'     => 'Mysql',
-        'host'        => '192.168.1.10',
-        'username'    => 'api_v2_m_bsns',
-        'password'    => '^!k8Cb3RWiNB!ifL!#W3',
-        'dbname'      => 'business_center',
+        'host'        => '127.0.0.1',
+        'username'    => 'root',
+        'password'    => 'root',
+        'dbname'      => 'test',
         'charset'     => 'utf8',
     ),
     'application' => array(
