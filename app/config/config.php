@@ -6,7 +6,7 @@ return new \Phalcon\Config(array(
         'host'        => '127.0.0.1',
         'username'    => 'root',
         'password'    => 'root',
-        'dbname'      => 'test',
+        'dbname'      => 'business_center',
         'charset'     => 'utf8',
     ),
     'application' => array(
