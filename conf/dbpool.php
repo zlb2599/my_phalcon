@@ -69,6 +69,24 @@ $di->setShared('bi_master', function() use ($config) {
 $di->setShared('bi_slave', function() use ($config) {
     return connectDb($config, 'bi', 'slave');
 });
+//市场招生中心主库配置
+$di->setShared('market_master', function() use ($config) {
+    return connectDb($config, 'market', 'master');
+});
+
+//市场招生中心从库配置
+$di->setShared('market_slave', function() use ($config) {
+    return connectDb($config, 'market', 'slave');
+});
+//市场招生中心主库配置
+$di->setShared('local_master', function() use ($config) {
+    return connectDb($config, 'local', 'master');
+});
+
+//市场招生中心从库配置
+$di->setShared('local_slave', function() use ($config) {
+    return connectDb($config, 'local', 'slave');
+});
 
 function connectDb($db_config, $db_name, $db_type)
 {
