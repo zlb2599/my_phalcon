@@ -2,3 +2,5 @@
 /conf/conf.php
 /app/config/config.php
 /webroot/jpush.log
+.idea
+tmp
