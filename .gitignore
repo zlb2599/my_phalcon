@@ -8,3 +8,4 @@
 .idea
 tmp
 
+/app/config/config.php
