@@ -203,12 +203,12 @@ class AppModel extends \Phalcon\Mvc\Model
             $sql    .= " ({$values}), ";
         }
         $sql    = rtrim(trim($sql), ',');
-        $result = $this->getDI()->get($this->getWriteConnectionService())->execute($sql);
+        $result = $this->getWriteConnection()->execute($sql);
         if (!$result) {
             throw new \Exception('批量插入失败');
         }
 
-        return $this->getDI()->get($this->getWriteConnectionService())->affectedRows();
+        return $this->getWriteConnection()->affectedRows();
 
     }
 
@@ -302,12 +302,12 @@ class AppModel extends \Phalcon\Mvc\Model
         }
         $sql = "UPDATE `{$this->getSource()}` SET {$set} WHERE {$where}";
 
-        $result = $this->getDI()->get($this->getWriteConnectionService())->execute($sql);
+        $result = $this->getWriteConnection()->execute($sql);
         if (!$result) {
             throw new \Exception('更新失败');
         }
 
-        return $this->getDI()->get($this->getWriteConnectionService())->affectedRows();
+        return $this->getWriteConnection()->affectedRows();
     }
 
     /**
@@ -475,12 +475,12 @@ class AppModel extends \Phalcon\Mvc\Model
         });
         $sql .= " (".implode(',', $data).") ";
 
-        $result = $this->getDI()->get($this->getWriteConnectionService())->execute($sql);
+        $result = $this->getWriteConnection()->execute($sql);
         if (!$result) {
             throw new \Exception('添加失败');
         }
 
-        return $this->getDI()->get($this->getWriteConnectionService())->affectedRows();
+        return $this->getWriteConnection()->affectedRows();
     }
 
 
