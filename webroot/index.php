@@ -79,6 +79,10 @@ try {
 
     //  对象内的方法
     $myController = new $controller();
+    if($func=='download'){
+        $app->post("/$action/$func", [$myController, $func]);
+
+    }
     $app->get("/$action/$func", [$myController, $func]);
 
     /**
