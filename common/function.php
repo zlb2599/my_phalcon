@@ -1,7 +1,6 @@
 <?php
 /**
  * 公共方法
- *
  * @copyright Copyright 2012-2017, BAONAHAO Software Foundation, Inc. ( http://api.baonahao.com/ )
  * @link http://api.baonahao.com api(tm) Project
  * @author gaoxiang <gaoxiang@xiaohe.com>
@@ -53,7 +52,7 @@ function getConfig($keys = '', $file_name = '')
     }
 
     $conf = new Phalcon\Config\Adapter\Php($path);
-
+    $conf = $conf->toArray();
 
     $key_arr = explode(".", $keys);
     if (count($key_arr) > 1) {
@@ -89,7 +88,6 @@ function C($key = '', $file_name = '')
 
 /**
  * 获取数组里的值
- *
  * @param  array $arr 数组
  * @param  mixed $key 键名
  * @param  mixed $default 默认值
@@ -123,11 +121,9 @@ function getArrVal($arr, $key, $default = '')
 
 /**
  * 记录日志
- *
- * @param mixed $log_content 要调试的数据
+ * @param mixed  $log_content 要调试的数据
  * @param string $log_level 日志级别(ERROR:执行错误日志 WARN:警告日志 INFO:交互信息日志 DEBUG:调试日志)
  * @param string $file_name 记录日志文件
- *
  * @return array
  */
 function DLOG($log_content = '', $log_level = 'INFO', $file_name = 'debug.log')
@@ -166,10 +162,8 @@ function DLOG($log_content = '', $log_level = 'INFO', $file_name = 'debug.log')
 
 /**
  * 获取客户端IP地址
- *
  * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
  * @param boolean $adv 是否进行高级模式获取（有可能被伪装）
- *
  * @return string
  */
 function get_client_ip($type = 0, $adv = false)
@@ -208,9 +202,7 @@ function get_client_ip($type = 0, $adv = false)
 
 /**
  * 返回UUID
- *
  * @param void
- *
  * @return string
  */
 function getUuid()
@@ -358,7 +350,6 @@ function connRedis()
 
 /**
  * 名称首字母排序
- *
  * @author zhaodongjuan <zhaodongjuan@xiaohe.com>
  * @date 2017-09-25 14:29
  */
@@ -470,6 +461,12 @@ function imgLink(&$data, $field)
     }
 }
 
+/**
+ * 替换unicode转义
+ * @param $match
+ * @return string
+ * @author zhanglibo <zhanglibo@xiaohe.com>
+ */
 function replace_unicode_escape_sequence($match)
 {
     return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
@@ -486,42 +483,30 @@ function unicode_decode($str)
     return preg_replace_callback('/\\\\u([0-9a-f]{4})/i', 'replace_unicode_escape_sequence', $str);
 }
 
-function is_android()
-{
-    $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-
-    return strpos($agent, 'android')?true:false;
-}
-
 /**
  * 浏览器友好的变量输出
- * @param mixed $var 变量
- * @param boolean $echo 是否输出 默认为True 如果为false 则返回输出字符串
- * @param string $label 标签 默认为空
- * @param boolean $strict 是否严谨 默认为true
+ * @param mixed   $var 变量
+ * @param boolean $echo 是否输出 默认为true 如果为false 则返回输出字符串
+ * @param string  $label 标签 默认为空
+ * @param integer $flags htmlspecialchars flags
  * @return void|string
  */
-function dump($var, $echo=true, $label=null, $strict=true) {
-    $label = ($label === null) ? '' : rtrim($label) . ' ';
-    if (!$strict) {
-        if (ini_get('html_errors')) {
-            $output = print_r($var, true);
-            $output = '<pre>' . $label . htmlspecialchars($output, ENT_QUOTES) . '</pre>';
-        } else {
-            $output = $label . print_r($var, true);
-        }
-    } else {
-        ob_start();
-        var_dump($var);
-        $output = ob_get_clean();
-        if (!extension_loaded('xdebug')) {
-            $output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
-            $output = '<pre>' . $label . htmlspecialchars($output, ENT_QUOTES) . '</pre>';
-        }
+function dump($var, $echo = true, $label = null, $flags = ENT_SUBSTITUTE)
+{
+    $label = (null === $label)?'':rtrim($label).':';
+    ob_start();
+    var_dump($var);
+    $output = ob_get_clean();
+    $output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
+    if (!extension_loaded('xdebug')) {
+        $output = htmlspecialchars($output, $flags);
     }
+    $output = '<pre>'.$label.$output.'</pre>';
     if ($echo) {
         echo($output);
-        return null;
-    }else
+
+        return;
+    } else {
         return $output;
+    }
 }

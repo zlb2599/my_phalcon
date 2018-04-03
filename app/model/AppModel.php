@@ -12,6 +12,7 @@ class AppModel extends \Phalcon\Mvc\Model
      * @var string
      */
     public $id;
+
     /**
      * @var integer
      */
@@ -22,12 +23,10 @@ class AppModel extends \Phalcon\Mvc\Model
      */
     public $is_delete;
 
-
     /**
      * @var string
      */
     public $created;
-
 
     /**
      * @var string
@@ -153,22 +152,21 @@ class AppModel extends \Phalcon\Mvc\Model
         if (empty($data)) {
             return false;
         }
-        $attributes = $this->getModelsMetaData()->getAttributes($this);
-        if (in_array('created', $attributes)) {
+        if (property_exists($this, 'created')) {
             $data['created'] = date('Y-m-d H:i:s');
         }
-        if (in_array('modified', $attributes)) {
+        if (property_exists($this, 'modified')) {
             $data['modified'] = date('Y-m-d H:i:s');
         }
-        if (in_array('is_usable', $attributes)) {
+        if (property_exists($this, 'is_usable')) {
             $data['is_usable'] = 1;
         }
-        if (in_array('is_delete', $attributes)) {
+        if (property_exists($this, 'is_delete')) {
             $data['is_delete'] = 2;
         }
         $this->create($data);
 
-        return $this->getDI()->get($this->getWriteConnectionService())->affectedRows();
+        return $this->getWriteConnection()->affectedRows();
     }
 
     /**
@@ -184,25 +182,25 @@ class AppModel extends \Phalcon\Mvc\Model
         $db_security_code = getConfig('DB_SECURITY_CODE');
 
         $keys = array_keys(reset($data));
-        $keys = array_map(function ($key)
-        {
-            return "`{$key}`";
-        }, $keys);
+        foreach ($keys as &$val) {
+            $val = "`{$val}`";
+        }
         $keys = implode(',', $keys);
         $sql  = "INSERT INTO ".$this->getSource()." ({$keys}) VALUES ";
         foreach ($data as $k => $v) {
-            array_walk($v, function (&$val, $key) use ($encode_field, $db_security_code)
-            {
+            foreach ($v as $key => &$val) {
                 if ($key == $encode_field) {
                     $val = "ENCODE('{$val}','{$db_security_code}')";
                 } else {
                     $val = "'{$val}'";
                 }
-            });
+            }
+
             $values = implode(',', array_values($v));
             $sql    .= " ({$values}), ";
         }
-        $sql    = rtrim(trim($sql), ',');
+        $sql = rtrim(trim($sql), ',');
+
         $result = $this->getWriteConnection()->execute($sql);
         if (!$result) {
             throw new \Exception('批量插入失败');
@@ -222,17 +220,16 @@ class AppModel extends \Phalcon\Mvc\Model
     public function updateById(array $data = null, $whiteList = null)
     {
         $this->id = getArrVal($data, 'id');
-        if (count($data) > 0) {
-            $attributes = $this->getModelsMetaData()->getAttributes($this);
-            if (in_array('modified', $attributes)) {
-                $data['modified'] = date('Y-m-d H:i:s');
-            }
-            $this->skipAttributesOnUpdate(array_diff($attributes, array_keys($data)));
+        if (property_exists($this, 'modified')) {
+            $data['modified'] = date('Y-m-d H:i:s');
+
         }
+        $attributes = $this->getModelsMetaData()->getAttributes($this);
+        $this->skipAttributesOnUpdate(array_diff($attributes, array_keys($data)));
 
         $this->update($data, $whiteList);
 
-        return $this->getDI()->get($this->getWriteConnectionService())->affectedRows();
+        return $this->getWriteConnection()->affectedRows();
     }
 
     /**
@@ -244,17 +241,14 @@ class AppModel extends \Phalcon\Mvc\Model
      */
     public function saveById(array $data = null, $whiteList = null)
     {
-        if (count($data) > 0) {
-            $attributes = $this->getModelsMetaData()->getAttributes($this);
-            if (in_array('modified', $attributes)) {
-                $data['modified'] = date('Y-m-d H:i:s');
-            }
-            $this->skipAttributesOnUpdate(array_diff($attributes, array_keys($data)));
-
+        if (property_exists($this, 'modified')) {
+            $data['modified'] = date('Y-m-d H:i:s');
         }
+        $attributes = $this->getModelsMetaData()->getAttributes($this);
+        $this->skipAttributesOnUpdate(array_diff($attributes, array_keys($data)));
         $this->save($data, $whiteList);
 
-        return $this->getDI()->get($this->getWriteConnectionService())->affectedRows();
+        return $this->getWriteConnection()->affectedRows();
 
     }
 
@@ -274,27 +268,25 @@ class AppModel extends \Phalcon\Mvc\Model
         if (count($condition) == 0 || count($data) == 0) {
             return false;
         }
-        $attributes = $this->getModelsMetaData()->getAttributes($this);
-        if (in_array('modified', $attributes)) {
+        if (property_exists($this, 'modified')) {
             $data['modified'] = date('Y-m-d H:i:s');
         }
-        array_walk($data, function (&$val, $key) use ($encode_field, $db_security_code)
-        {
+
+        foreach ($data as $key => &$val) {
             if ($key == $encode_field) {
                 $val = "`{$key}`=ENCODE('{$val}','{$db_security_code}')";
             } else {
                 $val = "`{$key}`='{$val}'";
             }
-        });
+        }
         $set = join(',', $data);
         if (!is_array($condition)) {
             //字符串
             $where = $condition;
         } else {
-            array_walk($condition, function (&$val, $key)
-            {
+            foreach ($condition as $key => &$val) {
                 $val = "`{$key}`='{$val}'";
-            });
+            }
             $where = join(',', $condition);
         }
         if (empty($set) || empty($where)) {
@@ -329,12 +321,11 @@ class AppModel extends \Phalcon\Mvc\Model
         }
         $keys = array_keys($condition);
 
-        $where = array_map(function ($val)
-        {
-            return "{$val}=:{$val}:";
-        }, $keys);
+        foreach ($keys as &$val) {
+            $val = "{$val}=:{$val}:";
+        }
 
-        return join(' and ', $where);
+        return join(' and ', $keys);
 
     }
 
@@ -415,17 +406,16 @@ class AppModel extends \Phalcon\Mvc\Model
      */
     public function beforeCreate()
     {
-        $attributes = $this->getModelsMetaData()->getAttributes($this);
-        if (in_array('created', $attributes)) {
+        if (property_exists($this, 'created')) {
             $this->created = date('Y-m-d H:i:s');
         }
-        if (in_array('modified', $attributes)) {
+        if (property_exists($this, 'modified')) {
             $this->modified = date('Y-m-d H:i:s');
         }
-        if (in_array('is_usable', $attributes)) {
+        if (property_exists($this, 'is_usable')) {
             $this->is_usable = 1;
         }
-        if (in_array('is_delete', $attributes)) {
+        if (property_exists($this, 'is_delete')) {
             $this->is_delete = 2;
         }
     }
@@ -443,44 +433,58 @@ class AppModel extends \Phalcon\Mvc\Model
     {
         $db_security_code = getConfig('DB_SECURITY_CODE');
 
-        $keys = array_keys($data);
-        $keys = array_map(function ($key)
-        {
-            return "`{$key}`";
-        }, $keys);
         //默认值
-        $attributes = $this->getModelsMetaData()->getAttributes($this);
-        if (in_array('created', $attributes)) {
+        if (property_exists($this, 'created')) {
             $data['created'] = date('Y-m-d H:i:s');
         }
-        if (in_array('modified', $attributes)) {
+        if (property_exists($this, 'modified')) {
             $data['modified'] = date('Y-m-d H:i:s');
         }
-        if (in_array('is_usable', $attributes)) {
+        if (property_exists($this, 'is_usable')) {
             $data['is_usable'] = 1;
         }
-        if (in_array('is_delete', $attributes)) {
-            $data['is_usable'] = 2;
+        if (property_exists($this, 'is_delete')) {
+            $data['is_delete'] = 2;
+        }
+        $keys = array_keys($data);
+        foreach ($keys as &$val) {
+            $val = "`{$val}`";
         }
         $keys = implode(',', $keys);
         $sql  = "INSERT INTO ".$this->getSource()." ({$keys}) VALUES ";
 
-        array_walk($data, function (&$val, $key) use ($encode_field, $db_security_code)
-        {
+        foreach ($data as $key => &$val) {
             if ($key != $encode_field) {
                 $val = "'{$val}'";
             } else {
                 $val = "ENCODE('{$val}','{$db_security_code}')";
             }
-        });
-        $sql .= " (".implode(',', $data).") ";
-
+        }
+        $sql    .= " (".implode(',', $data).") ";
         $result = $this->getWriteConnection()->execute($sql);
         if (!$result) {
             throw new \Exception('添加失败');
         }
 
         return $this->getWriteConnection()->affectedRows();
+    }
+
+    /**
+     * 一维数组值加单引号
+     * @param $data
+     * @return array
+     * @author zhanglibo <zhanglibo@xiaohe.com>
+     */
+    public function addMark($data)
+    {
+        if (empty($data)) {
+            return [];
+        }
+        foreach ($data as &$value) {
+            $value = "'{$value}'";
+        }
+
+        return $data;
     }
 
 
