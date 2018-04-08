@@ -205,7 +205,6 @@ class AppModel extends \Phalcon\Mvc\Model
         if (!$result) {
             throw new \Exception('批量插入失败');
         }
-
         return $this->getWriteConnection()->affectedRows();
 
     }
@@ -485,6 +484,26 @@ class AppModel extends \Phalcon\Mvc\Model
         }
 
         return $data;
+    }
+    /**
+     * 统计-分组
+     * @param      $condition
+     * @param      $field
+     * @param null $alias
+     * @return array
+     * @author zhanglibo <zhanglibo@xiaohe.com>
+     * @version:v3.0.0
+     */
+    public function getCountGroupByField($condition, $field, $alias = null)
+    {
+        $result = $this->find([
+            'columns'    => "{$field},COUNT(1) as num",
+            'conditions' => $this->getCondition($condition),
+            'bind'       => $this->getBind($condition),
+            'group'      => $alias?:$field
+        ]);
+
+        return $result?$result->toArray():[];
     }
 
 
