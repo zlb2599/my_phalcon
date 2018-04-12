@@ -13,8 +13,6 @@
  * specified type.
  *
  * The expected value is passed in the constructor.
- *
- * @since Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_IsType extends PHPUnit_Framework_Constraint
 {
@@ -57,7 +55,8 @@ class PHPUnit_Framework_Constraint_IsType extends PHPUnit_Framework_Constraint
     protected $type;
 
     /**
-     * @param  string                      $type
+     * @param string $type
+     *
      * @throws PHPUnit_Framework_Exception
      */
     public function __construct($type)
@@ -81,7 +80,8 @@ class PHPUnit_Framework_Constraint_IsType extends PHPUnit_Framework_Constraint
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param  mixed $other Value or object to evaluate.
+     * @param mixed $other Value or object to evaluate.
+     *
      * @return bool
      */
     protected function matches($other)
@@ -92,7 +92,7 @@ class PHPUnit_Framework_Constraint_IsType extends PHPUnit_Framework_Constraint
 
             case 'integer':
             case 'int':
-                return is_integer($other);
+                return is_int($other);
 
             case 'double':
             case 'float':

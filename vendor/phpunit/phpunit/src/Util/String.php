@@ -10,34 +10,26 @@
 
 /**
  * String helpers.
- *
- * @since Class available since Release 3.6.0
  */
 class PHPUnit_Util_String
 {
     /**
      * Converts a string to UTF-8 encoding.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return string
      */
     public static function convertToUtf8($string)
     {
-        if (!self::isUtf8($string)) {
-            if (function_exists('mb_convert_encoding')) {
-                $string = mb_convert_encoding($string, 'UTF-8');
-            } else {
-                $string = utf8_encode($string);
-            }
-        }
-
-        return $string;
+        return mb_convert_encoding($string, 'UTF-8');
     }
 
     /**
      * Checks a string for UTF-8 encoding.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return bool
      */
     protected static function isUtf8($string)

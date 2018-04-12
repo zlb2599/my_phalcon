@@ -15,7 +15,6 @@ class BankAccountException extends RuntimeException
 /**
  * A bank account.
  *
- * @since      Class available since Release 2.3.0
  */
 class BankAccount
 {
@@ -39,7 +38,8 @@ class BankAccount
     /**
      * Sets the bank account's balance.
      *
-     * @param  float                $balance
+     * @param float $balance
+     *
      * @throws BankAccountException
      */
     protected function setBalance($balance)
@@ -54,7 +54,8 @@ class BankAccount
     /**
      * Deposits an amount of money to the bank account.
      *
-     * @param  float                $balance
+     * @param float $balance
+     *
      * @throws BankAccountException
      */
     public function depositMoney($balance)
@@ -67,7 +68,8 @@ class BankAccount
     /**
      * Withdraws an amount of money from the bank account.
      *
-     * @param  float                $balance
+     * @param float $balance
+     *
      * @throws BankAccountException
      */
     public function withdrawMoney($balance)

@@ -13,8 +13,6 @@
  * static attribute.
  *
  * The attribute name is passed in the constructor.
- *
- * @since Class available since Release 3.1.0
  */
 class PHPUnit_Framework_Constraint_ClassHasStaticAttribute extends PHPUnit_Framework_Constraint_ClassHasAttribute
 {
@@ -22,7 +20,8 @@ class PHPUnit_Framework_Constraint_ClassHasStaticAttribute extends PHPUnit_Frame
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param  mixed $other Value or object to evaluate.
+     * @param mixed $other Value or object to evaluate.
+     *
      * @return bool
      */
     protected function matches($other)
@@ -42,7 +41,6 @@ class PHPUnit_Framework_Constraint_ClassHasStaticAttribute extends PHPUnit_Frame
      * Returns a string representation of the constraint.
      *
      * @return string
-     * @since  Method available since Release 3.3.0
      */
     public function toString()
     {

@@ -11,8 +11,6 @@
 /**
  * Constraint that asserts that the value it is evaluated for is less than
  * a given value.
- *
- * @since Class available since Release 3.0.0
  */
 class PHPUnit_Framework_Constraint_LessThan extends PHPUnit_Framework_Constraint
 {
@@ -34,7 +32,8 @@ class PHPUnit_Framework_Constraint_LessThan extends PHPUnit_Framework_Constraint
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param  mixed $other Value or object to evaluate.
+     * @param mixed $other Value or object to evaluate.
+     *
      * @return bool
      */
     protected function matches($other)
