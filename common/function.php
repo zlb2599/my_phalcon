@@ -394,31 +394,6 @@ function getFirstCharter($str)
 }
 
 
-/*
- * 数据变更为字符串
- *
- * @param array $data 转换数据
- * @param string $append_symbol 追加符类型
- *
- * @return bool
- *
- * */
-function array2string($data, $append_symbol = '1')
-{
-    //追加符类型
-    $append_symbol_type = array(1 => "'");
-    //分割符
-    $separator     = getArrVal($data, 'separator', "','");
-    $append_symbol = !empty($append_symbol_type[$append_symbol])?$append_symbol_type[$append_symbol]:$append_symbol;
-
-    if (empty($data)) {
-        return '';
-    }
-    $data = array_unique((array)$data);
-
-    return $append_symbol.implode($separator, $data).$append_symbol;
-}
-
 /**
  * 描述：三元运算获取值适用于获取数组中的字符串
  * @param
@@ -509,4 +484,16 @@ function dump($var, $echo = true, $label = null, $flags = ENT_SUBSTITUTE)
     } else {
         return $output;
     }
+}
+
+function array2string($data, $symbol = "'")
+{
+    if (empty($data)) {
+        return '';
+    }
+    foreach ($data as &$value) {
+        $value = "{$symbol}{$value}{$symbol}";
+    }
+
+    return join(',', $data);
 }
