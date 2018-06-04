@@ -23,6 +23,10 @@ class ComposerStaticInite2c17fb6bf216c7c725e984779dc6616
         array (
             'Symfony\\Component\\Yaml\\' => 23,
         ),
+        'O' => 
+        array (
+            'OSS\\' => 4,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
@@ -44,6 +48,10 @@ class ComposerStaticInite2c17fb6bf216c7c725e984779dc6616
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'OSS\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aliyuncs/oss-sdk-php/src/OSS',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -67,11 +75,10 @@ class ComposerStaticInite2c17fb6bf216c7c725e984779dc6616
 
     public static $classMap = array (
         'AppModel' => __DIR__ . '/../..' . '/app/model/AppModel.php',
-        'DataStatisticController' => __DIR__ . '/../..' . '/app/controller/DataStatisticController.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
-        'McEmployees' => __DIR__ . '/../..' . '/app/model/McEmployees.php',
+        'GoodsModel' => __DIR__ . '/../..' . '/app/model/GoodsModel.php',
         'MyController' => __DIR__ . '/../..' . '/app/controller/MyController.php',
         'PHPUnitController' => __DIR__ . '/../..' . '/app/controller/PHPUnitController.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',

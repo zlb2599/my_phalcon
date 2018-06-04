@@ -7,11 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AppModel' => $baseDir . '/app/model/AppModel.php',
-    'DataStatisticController' => $baseDir . '/app/controller/DataStatisticController.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/src/Factory.php',
-    'McEmployees' => $baseDir . '/app/model/McEmployees.php',
+    'GoodsModel' => $baseDir . '/app/model/GoodsModel.php',
     'MyController' => $baseDir . '/app/controller/MyController.php',
     'PHPUnitController' => $baseDir . '/app/controller/PHPUnitController.php',
     'PHPUnit\\Framework\\Assert' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
